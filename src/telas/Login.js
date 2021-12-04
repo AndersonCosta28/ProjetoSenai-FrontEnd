@@ -77,8 +77,6 @@ export default function App({ navigation }) {
         }}
       />
       <Text>Esqueceu a senha</Text>
-
-
     </View>
   );
 }

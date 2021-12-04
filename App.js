@@ -2,15 +2,17 @@ import * as React from 'react';
 import { View, Text, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import dadospessoais from './src/telas/cadastro/dadospessoais';
-import endereco from './src/telas/cadastro/endereco';
+import Pessoa_I from './src/telas/cadastro/form';
 import Login from './src/telas/Login';
 import lista from './src/telas/lista'
 import estilo from './src/estilo';
 import firebase from './src/telas/FireBase';
 import listaMySQL from './src/telas/listaMySQL';
-import dadospessoais_U from './src/telas/atualizar/dadospessoais_U';
-import endereco_U from './src/telas/atualizar/endereco_U';
+import Pessoa_U from './src/telas/atualizar/Forms_U';
+import form from './src/telas/cadastro/form';
+import evento from './src/telas/cadastro/evento'
+
+import teste from './teste'
 
 function HomeScreen({ navigation }) {
 
@@ -18,18 +20,18 @@ function HomeScreen({ navigation }) {
     <View style={estilo.container}>
       <View style={estilo.countContainer}>
       </View>
-      <View style={estilo.view}>
+      {/* <View style={estilo.view}>
         <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('Details', { nome: "Ana Carolina", sobrenome: "Silva Costa" })}><Text style={estilo.texto}>Detalhes</Text></TouchableOpacity>
-      </View>
+      </View> */}
       <View style={estilo.view}>
-        <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('dadospessoais')}><Text style={estilo.texto}>Cadastrar</Text></TouchableOpacity>
+        <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('Pessoa_I')}><Text style={estilo.texto}>Cadastrar</Text></TouchableOpacity>
       </View>
       <View style={estilo.view}>
         <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('lista')}><Text style={estilo.texto}>lista</Text></TouchableOpacity>
       </View>
-      <View style={estilo.view}>
+      {/* <View style={estilo.view}>
         <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('firebase')}><Text style={estilo.texto}>FireBase</Text></TouchableOpacity>
-      </View>
+      </View> */}
       <View style={estilo.view}>
         <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('Login')}><Text style={estilo.texto}>Sair</Text></TouchableOpacity>
       </View>
@@ -62,12 +64,13 @@ function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Details" component={DetailsScreen} />
-        <Stack.Screen name="dadospessoais" component={dadospessoais} options={{ title: "Dados pessoais" }} />
-        <Stack.Screen name="endereco" component={endereco} />
+        <Stack.Screen name="Pessoa_I" component={Pessoa_I} options={{ title: "Dados pessoais" }} />
         <Stack.Screen name="firebase" component={firebase} />
         <Stack.Screen name="lista" component={listaMySQL} /> 
-        <Stack.Screen name="dadospessoais_U" component={dadospessoais_U} options={{ title: "Dados pessoais" }} />
-        <Stack.Screen name="endereco_U" component={endereco_U} />
+        <Stack.Screen name="Pessoa_U" component={Pessoa_U} options={{ title: "Dados pessoais" }} />
+        <Stack.Screen name="teste" component={teste} />
+        <Stack.Screen name="form" component={form} />
+        <Stack.Screen name="evento" component={evento} />
       </Stack.Navigator>
     </NavigationContainer>
   );

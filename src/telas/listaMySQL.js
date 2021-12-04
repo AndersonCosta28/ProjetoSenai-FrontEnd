@@ -45,9 +45,9 @@ const App = ({ navigation }) => {
                         </Text>
                         <Button title="Alterar"
                             onPress={() => {
-                                axios.get('http://localhost:3000/dados', { responseType: "json", params: { id: item.idpessoa } })
+                                axios.get('http://localhost:3000/dados', { responseType: "json", params: { idpessoa: item.idpessoa } })
                                     .then(Response => {
-                                        navigation.navigate('dadospessoais_U', Response.data[0])
+                                        navigation.navigate('Pessoa_U', Response.data[0])
                                     })
                                     .catch(Error => console.log(Error))
                             }} />
