@@ -6,13 +6,12 @@ import firebase from '../../Connection';
 
 export default function App({ navigation }) {
     const [Proximo, SetProximo] = useState(false)
-    const [Pessoa, SetPessoa] = useState({ nome: '', sobrenome: '', telefone: '', email: ''})
-    const [infoCep, setCep] = useState({cep: '', logradouro: '', numero: '', bairro: '', localidade: '', complemento: '', uf: ''});
+    const [Pessoa, SetPessoa] = useState({ nome: '', sobrenome: '', telefone: '', email: '' })
+    const [infoCep, setCep] = useState({ cep: '', logradouro: '', numero: '', bairro: '', localidade: '', complemento: '', uf: '' });
     const [pesquisar, setPesquisar] = useState('');
 
     const validarCampo = () => {
-        console.log(Pessoa)
-        if (Pessoa.nome.trim() && Pessoa.sobrenome.trim() && Pessoa.telefone.trim() && Pessoa.email.trim() && infoCep.cep.trim() && infoCep.logradouro.trim() && infoCep.numero.trim() && infoCep.bairro.trim() && infoCep.localidade.trim() && infoCep.uf.trim() !== '') {
+        if (Pessoa.nome.trim() && Pessoa.sobrenome.trim() && Pessoa.telefone.trim() && Pessoa.email.trim() && infoCep.cep.trim() && infoCep.numero.trim()  && infoCep.logradouro.trim() && infoCep.bairro.trim() && infoCep.localidade.trim() && infoCep.uf.trim() !== '') {
             SetProximo(true)
             return true
         }
@@ -30,15 +29,15 @@ export default function App({ navigation }) {
         )
     }
     const requisicao = async () => {
-        console.log(pesquisar)
         const { data } = await axios.get(`https://viacep.com.br/ws/${pesquisar.cep}/json/`);
+        delete data.siafi;
+        delete data.gia;
+        delete data.ibge;
+        delete data.ddd;
+        data.numero = ''
         setCep(data)
     }
-    const Salvar = () => {
-        delete infoCep.siafi;
-        delete infoCep.gia;
-        delete infoCep.ibge;
-        delete infoCep.ddd;
+    const Salvar = () => {        
         Pessoa.endereco = infoCep
         console.log(JSON.stringify(Pessoa))
         //await firebase.database().ref('usuarios').child(id).set(DadosPessoais);
@@ -56,119 +55,39 @@ export default function App({ navigation }) {
     return (
         <View>
             <SafeAreaView style={styles.container}>
-
                 <ScrollView style={styles.scrollView}>
-                    {/* <View style={estilo.t}>
-                <Text>ID: </Text>
-                <TextInput
-                    style={estilo.input}
-                    keyboardType="numeric"
-                    onChangeText={Text => { validarCampo(); SetID(Text); validarCampo(); }}
-                    onBlur={Text => {
+                    <Campo label="Nome: " onChangeText={Text => { SetPessoa(prevPreferences => { return { ...prevPreferences, nome: String(Text).trim() } }); validarCampo(); }} onBlur={Text => { validarCampo(); }} />
+                    <Campo label="Sobrenome: " onChangeText={Text => { SetPessoa(prevPreferences => { return { ...prevPreferences, sobrenome: String(Text).trim() } }); validarCampo(); }} onBlur={validarCampo} />
+                    <Campo label="Telefone: " keyboardType="phone-pad" style={estilo.input} onChangeText={Text => { SetPessoa(prevPreferences => { return { ...prevPreferences, telefone: String(Text).trim() } }); validarCampo(); }} onBlur={() => { validarCampo(); }} />
+                    <Campo label="Email: " keyboardType="email-address" style={estilo.input} onChangeText={Text => { SetPessoa(prevPreferences => { return { ...prevPreferences, email: String(Text).trim() } }); validarCampo(); }} onBlur={() => { validarCampo(); }} />
+                    <Campo label="CEP " placeholder="Informe o seu CEP" keyboardType="number-pad" onChangeText={text => setPesquisar({ cep: text })} onBlur={requisicao} />
+                    <Campo label='Logradouro: ' value={infoCep.logradouro} onBlur={() => { validarCampo(); }} />
+                    <Campo label='Complemento: ' defaultValue={infoCep.complemento} onBlur={() => { validarCampo(); }} />
+                    <Campo label='Bairro: ' value={infoCep.bairro} onBlur={() => { validarCampo(); }} />
+                    <Campo label='Cidade: ' value={infoCep.localidade} onBlur={() => { validarCampo(); }} />
+                    <Campo label='UF: ' value={infoCep.uf} onBlur={() => { validarCampo(); }} />
+                    <Campo label="Nº: " defaultValue={infoCep.numero}                    
+                    onChangeText={Text => {                        
+                        validarCampo(); 
+                        setCep(prevPreferences => {return { ...prevPreferences, numero: Text}});
                         validarCampo();
-
-                    }}></TextInput>
-            </View> */}
-                    <View style={estilo.t}>
-                        <Text>Nome: </Text>
-                        <TextInput
-                            style={estilo.input}
-                            onChangeText={Text => {
-                                validarCampo(); SetPessoa(prevPreferences => {
-                                    return {
-                                        ...prevPreferences, nome:
-                                            String(Text).trim()
-                                    }
-                                }); validarCampo();
-                            }}
-                            onBlur={Text => {
-                                validarCampo();
-                            }}></TextInput>
-                    </View>
-                    <View style={estilo.t}>
-                        <Text>Sobrenome: </Text><TextInput
-                            style={estilo.input}
-                            onChangeText={Text => {
-                                validarCampo();SetPessoa(prevPreferences => {
-                                    return {
-                                        ...prevPreferences, sobrenome:
-                                            String(Text).trim()
-                                    }
-                                });
-                                validarCampo();
-                            }}
-                            onBlur={Text => {
-                                validarCampo();
-                            }}></TextInput>
-                    </View>
-                    <View style={estilo.t}>
-                        <Text>Telefone: </Text><TextInput
-                            keyboardType="phone-pad"
-                            style={estilo.input}
-                            onChangeText={Text => {
-                                validarCampo();
-                                SetPessoa(prevPreferences => {
-                                    return {
-                                        ...prevPreferences, telefone:
-                                            String(Text).trim()
-                                    }
-                                });
-                                validarCampo();
-                            }}
-                            onBlur={Text => {
-                                validarCampo();
-                            }}></TextInput>
-                    </View>
-                    <View style={estilo.t}>
-                        <Text>Email: </Text><TextInput
-                            keyboardType="email-address"
-                            style={estilo.input}
-                            onChangeText={Text => {
-                                validarCampo();
-                                SetPessoa(prevPreferences => {
-                                    return {
-                                        ...prevPreferences, email:
-                                            String(Text).trim()
-                                    }
-                                });
-                                validarCampo();
-                            }}
-                            onBlur={Text => {
-                                validarCampo();
-                            }}></TextInput>
-                    </View>
-                    <View>
-                        <View style={estilo.t}>
-                            <Text>Informe seu CEP</Text><TextInput label="cep" style={estilo.input} keyboardType="number-pad" onChangeText={text => setPesquisar({ cep: text })} onBlur={requisicao} />
-                        </View>
-                    </View>
-                    <View style={estilo.t}>
-                        <Text>Logradouro: </Text><TextInput style={estilo.input} value={infoCep.logradouro} />
-                    </View>
-                    <View style={estilo.t}>
-                        <Text>Complemento: </Text><TextInput style={estilo.input} defaultValue={infoCep.complemento} />
-                    </View>
-                    <View style={estilo.t}>
-                        <Text>Bairro: </Text><TextInput style={estilo.input} value={infoCep.bairro} />
-                    </View>
-                    <View style={estilo.t}>
-                        <Text>Cidade: </Text><TextInput style={estilo.input} value={infoCep.localidade} />
-                    </View>
-                    <View style={estilo.t}>
-                        <Text>UF:</Text><TextInput style={estilo.input} value={infoCep.uf} />
-                    </View>
-                    <View style={estilo.t}>
-                        <Text>Nº:</Text><TextInput style={estilo.input} onChangeText={Text => setCep(prevPreferences => { return { ...prevPreferences, numero: Text } })} />
-                    </View>
+                    }}
+                         />
                     <Button onPress={Salvar} title="Salvar" disabled={!Proximo}></Button>
                 </ScrollView>
             </SafeAreaView>
-
         </View>
     );
 }
+const Campo = ({ label, ...props }) => (
+    <View style={estilo.t}>
+        <Text>{label}</Text>
+        <TextInput style={estilo.input}
+            {...props}
+        ></TextInput>
+    </View>
+)
 const styles = StyleSheet.create({
-
     scrollView: {
         marginHorizontal: 20,
     },

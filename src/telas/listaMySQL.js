@@ -51,7 +51,18 @@ const App = ({ navigation }) => {
                                     })
                                     .catch(Error => console.log(Error))
                             }} />
-                        <Button title="Deletar" />
+                        <Button title="Deletar" onPress={()=>{
+                            axios.delete('http://localhost:3000/dados', { responseType: "json", params: { idpessoa: item.idpessoa }})
+                            .then(Response => {
+                                if(Response.data){
+                                    navigation.navigate('Home')
+                                }
+                                else{
+                                    console.log('Falha ao deletar a pessoa')
+                                }
+                            })
+                            .catch(Error => Error)
+                        }} />
                     </View>}
             />
         </View>

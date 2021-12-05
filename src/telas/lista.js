@@ -26,7 +26,6 @@ const FlatListBasics = () => {
         <View style={styles.container}>
             <Button title="Ler" onPress={ler}></Button>
             <FlatList
-            // data={[{nome:"anderson", email:"Anderson 123"}, {nome: "Angela", email: "Angela123"}]}
                 data={lista}
                 renderItem={({ item }) => <Text style={styles.item}>{item.nome} - {item.email}</Text>}
             />

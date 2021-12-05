@@ -11,7 +11,7 @@ import listaMySQL from './src/telas/listaMySQL';
 import Pessoa_U from './src/telas/atualizar/Forms_U';
 import form from './src/telas/cadastro/form';
 import evento from './src/telas/cadastro/evento'
-
+import { useForm, Controller  } from 'react-hook-form'
 import teste from './teste'
 
 function HomeScreen({ navigation }) {
@@ -29,9 +29,12 @@ function HomeScreen({ navigation }) {
       <View style={estilo.view}>
         <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('lista')}><Text style={estilo.texto}>lista</Text></TouchableOpacity>
       </View>
-      {/* <View style={estilo.view}>
-        <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('firebase')}><Text style={estilo.texto}>FireBase</Text></TouchableOpacity>
-      </View> */}
+      <View style={estilo.view}>
+        <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('evento')}><Text style={estilo.texto}>evento</Text></TouchableOpacity>
+      </View>
+      <View style={estilo.view}>
+        <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('teste')}><Text style={estilo.texto}>teste</Text></TouchableOpacity>
+      </View>
       <View style={estilo.view}>
         <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('Login')}><Text style={estilo.texto}>Sair</Text></TouchableOpacity>
       </View>
