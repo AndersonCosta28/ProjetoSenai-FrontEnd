@@ -9,7 +9,6 @@ import { Tile } from 'react-native-elements';
 export default function App({ navigation }) {
 
   const [email, setEmail] = useState(null)
-  //const [email, setEmail] = useState("")
   const [password, setPassword] = useState(null)
 
   const entrar = () => {
@@ -28,16 +27,16 @@ export default function App({ navigation }) {
   const requisicao = () => {
     axios.defaults.headers.get['Content-Type'] = 'application/json;charset=utf-8';
     axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
-    // axios.get('http://localhost:3000/dados', { responseType: "json", params: {nome: "Teste"} })
+    // axios.get('https://projetosenai-backend.herokuapp.com/dados', { responseType: "json", params: {nome: "Teste"} })
     //   .then(Response => console.log(Response.data))
     //   .catch(Error => console.log(Error))
-    axios.get('http://localhost:3000/dados', { responseType: "json", params: { id: 1 } })
+    axios.get('https://projetosenai-backend.herokuapp.com/dados', { responseType: "json", params: { id: 1 } })
       .then(Response => console.log(" <-->" + Response.data))
       .catch(Error => console.log(Error))
 
       // axios({
       //   method: 'get',
-      //   url: 'http://localhost:3000/dados/',
+      //   url: 'https://projetosenai-backend.herokuapp.com/dados/',
       //   responseType: 'JSON',
       //   params: {id: 1}
       // })

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
-    
+
     input: {
         height: 40,
         margin: 12,
@@ -13,6 +13,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
+    t_view_text: {
+        width: 100
+    }
+    ,
+    t_text: {
+        textAlign: 'center'
+    }
+    ,
+    btn_salvar:{marginBottom: 20},
     btn: {
         alignItems: "center",
         backgroundColor: "#DDDDDD",

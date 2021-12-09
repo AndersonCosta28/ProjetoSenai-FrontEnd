@@ -6,7 +6,7 @@ import axios from 'axios';
 export default function App({ route, navigation }) {
     const [Proximo, SetProximo] = useState(false)
     const [endereco, setendereco] = useState()
-    const [Pessoa, SetPessoa] = useState({ nome: '', sobrenome: '', telefone: '', email: '' })
+    const [Pessoa, SetPessoa] = useState({ idpessoa: '', nome: '', sobrenome: '', telefone: '', email: '' })
     const [infoCep, setCep] = useState({ cep: '', logradouro: '', numero: '', bairro: '', localidade: '', complemento: '', uf: '' });
     const [pesquisar, setPesquisar] = useState('');
     const [idEndereco, SetIdEndereco] = useState();
@@ -22,7 +22,10 @@ export default function App({ route, navigation }) {
     }
 
     const validarCampo = () => {
-        if (Pessoa.nome.trim() && Pessoa.sobrenome.trim() && Pessoa.telefone.trim() && Pessoa.email.trim() !== '') {
+        setCep(prevPreferences => {
+            return { ...prevPreferences, idendereco: idEndereco }
+        });
+        if (Pessoa.nome.trim() && Pessoa.sobrenome.trim() && Pessoa.telefone.trim() && Pessoa.email.trim() && infoCep.cep.trim() && infoCep.numero.trim() && infoCep.logradouro.trim() && infoCep.bairro.trim() && infoCep.localidade.trim() && infoCep.uf.trim() !== '') {
             SetProximo(true)
             return true
         }
@@ -39,21 +42,29 @@ export default function App({ route, navigation }) {
         data.numero = ''
         setCep(data)
     }
-    const Salvar = () => {
+    const Salvar = (navigation) => {
+
         Pessoa.endereco = infoCep
         console.log(JSON.stringify(Pessoa))
         //await firebase.database().ref('usuarios').child(id).set(DadosPessoais);
-        axios.put('http://localhost:3000/dados', Pessoa)
+        axios.put('https://projetosenai-backend.herokuapp.com/dados', Pessoa)
             .then(Response => {
                 if (Response.data == true) {
-                    alerta("Cadastro efetuado com sucesso", "Clique para prosseguir", "Página inicial", navigation.navigate('Home'))
+                    Alert.alert(
+                        "Cadastro efetuado com sucesso",
+                        "Clique para prosseguir",
+                        [{
+                            text: "Página inicial", onPress: () => navigation.navigate('Home'), style: "default"
+                        }]
+                    )
                 }
                 else {
-                    alerta("Falha ao efetuar o cadastro", "Revise os dados antes de prosseguir", "Cancel")
+                    alerta("Falha ao efetuar o cadastro", "Revise os dados antes de prosseguir", [{
+                        text: "Página inicial", style: "cancel"
+                    }])
                 }
             })
-            .catch(Error => console.log(Error)
-            )
+            .catch(Error => console.log(Error))
     }
     useEffect(() => {
         const { cep, logradouro, numero, bairro, localidade, complemento, uf, idendereco } = route.params
@@ -61,7 +72,7 @@ export default function App({ route, navigation }) {
         SetPessoa({
             idpessoa: idpessoa, nome: nome, sobrenome: sobrenome, email: email, telefone: telefone
         })
-        setPesquisar({cep: cep})
+        setPesquisar({ cep: cep })
         setCep({
             cep: cep,
             logradouro: logradouro,
@@ -78,13 +89,10 @@ export default function App({ route, navigation }) {
         <View>
             <SafeAreaView style={styles.container}>
                 <ScrollView style={styles.scrollView}>
-                    <Campo label="ID: " editable={false}
-                        defaultValue={Pessoa.idpessoa}
-                        keyboardType="numeric"
-                        onChangeText={Text => { validarCampo(); SetID(Text); validarCampo(); }}
-                        onBlur={() => {
-                            validarCampo();
-                        }} />
+                    <Campo label="ID: "
+                        defaultValue={String(Pessoa.idpessoa)}
+                        editable={false}
+                    />
 
                     <Campo label="Nome: "
                         defaultValue={Pessoa.nome}
@@ -122,9 +130,7 @@ export default function App({ route, navigation }) {
                             });
                             validarCampo();
                         }}
-                        onBlur={() => {
-                            validarCampo();
-                        }} />
+                        onBlur={() => { validarCampo(); }} />
                     <Campo label="Email: "
                         keyboardType="email-address"
                         defaultValue={Pessoa.email}
@@ -143,20 +149,13 @@ export default function App({ route, navigation }) {
                         onChangeText={text => setPesquisar({ cep: text.replace('-', '') })}
                         onBlur={requisicao}
                     />
-                    <Campo label="Logradouro: " value={infoCep.logradouro} onBlur={() => { validarCampo(); }} />
-                    <Campo label="Complemento: " defaultValue={infoCep.complemento} onBlur={() => { validarCampo(); }} />
+                    <Campo label="Logradouro: " defaultValue={infoCep.logradouro} onChangeText={Text => { setCep(prevPreferences => { return { ...prevPreferences, logradouro: String(Text).trim() } }); }} onBlur={() => { validarCampo(); }} />
+                    <Campo label="Nº: " defaultValue={infoCep.numero} onChangeText={Text => { setCep(prevPreferences => { return { ...prevPreferences, numero: String(Text).trim(), idendereco: idEndereco } }); validarCampo(); }} />
+                    <Campo label="Complemento: " defaultValue={infoCep.complemento} onChangeText={Text => { setCep(prevPreferences => { return { ...prevPreferences, complemento: String(Text).trim() } }); validarCampo(); }} onBlur={() => { validarCampo(); }} />
                     <Campo label="Bairro: " value={infoCep.bairro} onBlur={() => { validarCampo(); }} />
                     <Campo label="Cidade: " value={infoCep.localidade} onBlur={() => { validarCampo(); }} />
                     <Campo label=" UF:" value={infoCep.uf} onBlur={() => { validarCampo(); }} />
-                    <Campo label="Nº: " defaultValue={infoCep.numero}
-                    onChangeText={Text => {                        
-                        validarCampo(); setCep(prevPreferences => {
-                            return { ...prevPreferences, numero: String(Text).trim(), idendereco: idEndereco }
-                        });
-                        validarCampo();
-                    }}
-                         />
-                    <Button onPress={Salvar} title="Salvar" disabled={!Proximo}></Button>
+                    <View style = {estilo.btn_salvar}><Button onPress={() => Salvar(navigation)} title="Salvar" disabled={!Proximo}></Button></View>
                 </ScrollView>
             </SafeAreaView>
         </View>
@@ -164,10 +163,8 @@ export default function App({ route, navigation }) {
 }
 const Campo = ({ label, ...props }) => (
     <View style={estilo.t}>
-        <Text>{label}</Text>
-        <TextInput style={estilo.input}
-            {...props}
-        ></TextInput>
+        <View style={estilo.t_view_text}><Text style={estilo.t_text}>{label}</Text></View>
+        <View><TextInput style={estilo.input} {...props} ></TextInput></View>
     </View>
 )
 const styles = StyleSheet.create({

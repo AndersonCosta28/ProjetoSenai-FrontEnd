@@ -13,14 +13,9 @@ export default function App() {
 
   return (
     <View>
-      <Controller
-        control={control}
-        rules={{
-         required: true,
-        }}
+      <Controller control={control} rules={{ required: true, }}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
-            // style={styles.input}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -28,16 +23,16 @@ export default function App() {
         )}
         name="firstName"
       />
-      {errors.firstName && <Text>This is required.</Text>}
+      {errors.firstName?.type === 'required' && <Text>This is required.</Text>}
 
       <Controller
         control={control}
         rules={{
-         maxLength: 100,
+         required: true,
+         maxLength: 10,
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
-            // style={styles.input}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -45,7 +40,8 @@ export default function App() {
         )}
         name="lastName"
       />
-
+      {errors.lastName?.type === 'maxLength' && <Text>Erro</Text> }
+      {errors.lastName?.type === 'required' && <Text>This is required.</Text>}
       <Button title="Submit" onPress={handleSubmit(onSubmit)} />
     </View>
   );
