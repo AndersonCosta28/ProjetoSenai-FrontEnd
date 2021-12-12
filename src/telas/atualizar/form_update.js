@@ -54,7 +54,7 @@ export default function App({ route, navigation }) {
             .then(Response => {
                 if (Response.data == true) {
                     Alert.alert(
-                        "Cadastro efetuado com sucesso",
+                        "Cadastro atualizado com sucesso",
                         "Clique para prosseguir",
                         [{
                             text: "Página inicial", onPress: () => navigation.navigate('Home'), style: "default"
@@ -62,7 +62,7 @@ export default function App({ route, navigation }) {
                     )
                 }
                 else {
-                    alerta("Falha ao efetuar o cadastro", "Revise os dados antes de prosseguir", [{
+                    alerta("Falha ao atualizar o cadastro", "Revise os dados antes de prosseguir", [{
                         text: "Página inicial", style: "cancel"
                     }])
                 }

@@ -1,14 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Picker, StyleSheet, Text, Button, Alert } from "react-native";
 import { RadioButton } from 'react-native-paper';
+import axios from '../../axios';
+
 
 
 export default function App() {
   const [selectedEvent, setSelectedEvent] = useState("Show 1");
   const [selectedPerson, setSelectedPerson] = useState("Pessoa 1");
   const [checked, setChecked] = useState("Inteira");
-  return (
+  const [lista, setlista] = useState([])
+  useEffect(() => {
+    axios.get('/dados/', { responseType: "json"})
+      .then(Response => {
+        setlista(Response.data)
+      })
+      .catch(Error => console.log(Error))
+  }, [])
+  function listar(){
 
+  }
+  return (
     <View style={styles.container}>
       <Text>Selecionar Evento:</Text>
       <View>

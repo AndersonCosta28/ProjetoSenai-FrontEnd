@@ -1,20 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Alert, TextInput } from "react-native";
 import { Icon } from 'react-native-elements'
-import axios from './../axios';
-import estilo from './../estilo'
+import axios from '../../axios';
+import estilo from '../../estilo'
 
 export default function App({ navigation }) {
   const [lista, setlista] = useState([])
   useEffect(() => {
-    axios.get('/dados/', { responseType: "json"})
+    axios.get('/dados/', { responseType: "json" })
       .then(Response => {
         setlista(Response.data)
       })
       .catch(Error => console.log(Error))
   }, [])
+
   return (
     <View>
+      <TextInput placeholder="Digite no nome Aqui" style={estilo.input} onChangeText={(Text) => {
+        const nome = String(Text).trim();
+        axios.get('/GetNome/', { responseType: "json", params: { nome: nome } })
+          .then(Response => {
+            console.log(Response.data)
+            setlista(Response.data)
+          })
+          .catch(Error => console.log(Error))
+      }}
+      ></TextInput>
       <FlatList
         data={lista}
         renderItem={({ item, index }) => CardItem(item, index, navigation)}

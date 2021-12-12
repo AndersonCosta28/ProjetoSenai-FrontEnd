@@ -33,18 +33,18 @@ export default function App({ route, navigation }) {
         <View>
             <SafeAreaView style={styles.container}>
                 <ScrollView style={styles.scrollView}>
-                    <Campo label="ID: " defaultValue={String(Pessoa.idpessoa)} />
-                    <Campo label="Nome: " defaultValue={Pessoa.nome} />
-                    <Campo label="Sobrenome: " defaultValue={Pessoa.sobrenome} />
-                    <Campo label="Telefone: " keyboardType="phone-pad" defaultValue={Pessoa.telefone} />
-                    <Campo label="Email: " keyboardType="email-address" defaultValue={Pessoa.email} />
-                    <Campo label="CEP" placeholder="Informe o seu CEP" defaultValue={infoCep.cep} keyboardType="number-pad" />
-                    <Campo label="Logradouro: " defaultValue={infoCep.logradouro} />
-                    <Campo label="Nº: " defaultValue={infoCep.numero} />
-                    <Campo label="Complemento: " defaultValue={infoCep.complemento} />
-                    <Campo label="Bairro: " defaultValue={infoCep.bairro} />
-                    <Campo label="Cidade: " defaultValue={infoCep.localidade} />
-                    <Campo label=" UF:" defaultValue={infoCep.uf} />
+                    <Campo label="ID: " defaultValue={String(Pessoa.idpessoa)} editable ={false} />
+                    <Campo label="Nome: " Value={Pessoa.nome} editable ={false}/>
+                    <Campo label="Sobrenome: " defaultValue={Pessoa.sobrenome} editable ={false}/>
+                    <Campo label="Telefone: " keyboardType="phone-pad" defaultValue={Pessoa.telefone} editable ={false} />
+                    <Campo label="Email: " keyboardType="email-address" defaultValue={Pessoa.email}editable ={false} />
+                    <Campo label="CEP" placeholder="Informe o seu CEP" defaultValue={infoCep.cep} keyboardType="number-pad"editable ={false} />
+                    <Campo label="Logradouro: " Value={infoCep.logradouro} editable ={false}/>
+                    <Campo label="Nº: " defaultValue={infoCep.numero}editable ={false}/>
+                    <Campo label="Complemento: " defaultValue={infoCep.complemento} editable ={false}/>
+                    <Campo label="Bairro: " defaultValue={infoCep.bairro} editable ={false}/>
+                    <Campo label="Cidade: " defaultValue={infoCep.localidade} editable ={false}/>
+                    <Campo label=" UF:" defaultValue={infoCep.uf}editable ={false} />
                 </ScrollView>
             </SafeAreaView>
         </View>

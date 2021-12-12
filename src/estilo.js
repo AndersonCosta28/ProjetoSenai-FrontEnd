@@ -11,7 +11,8 @@ const styles = StyleSheet.create({
     t: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginTop: 10
     },
     t_view_text: {
         width: 100
@@ -21,7 +22,7 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     }
     ,
-    btn_salvar:{marginBottom: 20},
+    btn_salvar:{marginTop: 20,marginBottom: 20},
     btn: {
         alignItems: "center",
         backgroundColor: "#DDDDDD",
@@ -36,12 +37,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "center",
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
+        alignItems: "center",        
     },
     button: {
         alignItems: "center",
         backgroundColor: "#2089dc",
-        padding: 10
+        padding: 10,
+        width: 200,
+        borderRadius: 200
     },
     texto: {
         color: "#ffffff",

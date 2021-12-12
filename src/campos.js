@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, TextInput, Button, ScrollView, StyleSheet, StatusBar, SafeAreaView, Alert, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import estilo from './estilo'
-//import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Campo = ({ label, ...props }) => (
     <View style={estilo.t}>
@@ -10,8 +9,6 @@ const Campo = ({ label, ...props }) => (
         <View><TextInput style={estilo.input} {...props} ></TextInput></View>
     </View>
 );
-
-
 
 const CampoData = ({ }) => {
     function formatarData(data) {
@@ -22,7 +19,6 @@ const CampoData = ({ }) => {
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
-
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
         setShow(Platform.OS === 'ios');
@@ -33,9 +29,11 @@ const CampoData = ({ }) => {
         setMode('date');
     };
     return (
-        <View>
-            <TouchableOpacity onPress={showMode} style={estilo.button}><Text>{formatarData(date)}</Text></TouchableOpacity>
-            {/* <Button onPress={showMode} title="Selecione a data" /> */}
+        <View style={estilo.t}>
+            <View style={estilo.t_view_text}><Text style={estilo.t_text}>Data</Text></View>
+            <TouchableOpacity onPress={showMode} style={estilo.button}><Text>
+                {/* {formatarData(date)} */} {date.toLocaleDateString('pt-br')}
+            </Text></TouchableOpacity>
             {show && (
                 <DateTimePicker
                     testID="dateTimePicker"
@@ -64,8 +62,9 @@ const CampoHora = ({ }) => {
         setMode('time');
     };
     return (
-        <View>
-            <TouchableOpacity onPress={showMode} style={estilo.button}><Text>{date.toTimeString().substring(0,5)}</Text></TouchableOpacity>
+        <View style={estilo.t}>
+            <View style={estilo.t_view_text}><Text style={estilo.t_text}>Hora</Text></View>
+            <TouchableOpacity onPress={showMode} style={estilo.button}><Text>{date.toTimeString().substring(0, 5)}</Text></TouchableOpacity>
             {show && (
                 <DateTimePicker
                     testID="dateTimePicker"

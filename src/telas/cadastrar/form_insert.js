@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, Button, ScrollView, StyleSheet, StatusBar, SafeAreaView, Alert } from 'react-native';
 import estilo from '../../estilo';
 import axios from './../../axios';
 import firebase from '../../Connection';
-import {Campo} from '../../campos'
+import { Campo } from '../../campos'
 
 
 export default function App({ navigation }) {
@@ -45,29 +45,32 @@ export default function App({ navigation }) {
                     )
                 }
                 else {
-                    alerta("Falha ao efetuar o cadastro", "Revise os dados antes de prosseguir", [{
+                    Alert.alert("Falha ao efetuar o cadastro", "Revise os dados antes de prosseguir", [{
                         text: "Página inicial", style: "cancel"
                     }])
                 }
             })
             .catch(Error => console.log(Error))
     }
+    useEffect(() => {
+        validarCampo()
+    }, [Pessoa, infoCep])
     return (
         <View>
             <SafeAreaView style={styles.container}>
                 <ScrollView style={styles.scrollView}>
-                    <Campo label="Nome: " onChangeText={Text => { SetPessoa(prevPreferences => { return { ...prevPreferences, nome: String(Text).trim() } }); validarCampo(); }} onBlur={Text => { validarCampo(); }} />
-                    <Campo label="Sobrenome: " onChangeText={Text => { SetPessoa(prevPreferences => { return { ...prevPreferences, sobrenome: String(Text).trim() } }); validarCampo(); }} onBlur={validarCampo} />
-                    <Campo label="Telefone: " keyboardType="phone-pad" style={estilo.input} onChangeText={Text => { SetPessoa(prevPreferences => { return { ...prevPreferences, telefone: String(Text).trim() } }); validarCampo(); }} onBlur={() => { validarCampo(); }} />
-                    <Campo label="Email: " keyboardType="email-address" style={estilo.input} onChangeText={Text => { SetPessoa(prevPreferences => { return { ...prevPreferences, email: String(Text).trim() } }); validarCampo(); }} onBlur={() => { validarCampo(); }} />
+                    <Campo label="Nome: " onChangeText={Text => { SetPessoa(prevPreferences => { return { ...prevPreferences, nome: String(Text).trim() } }); }} />
+                    <Campo label="Sobrenome: " onChangeText={Text => { SetPessoa(prevPreferences => { return { ...prevPreferences, sobrenome: String(Text).trim() } }); }} />
+                    <Campo label="Telefone: " keyboardType="phone-pad" style={estilo.input} onChangeText={Text => { SetPessoa(prevPreferences => { return { ...prevPreferences, telefone: String(Text).trim() } }); }} />
+                    <Campo label="Email: " keyboardType="email-address" style={estilo.input} onChangeText={Text => { SetPessoa(prevPreferences => { return { ...prevPreferences, email: String(Text).trim() } }); }} />
                     <Campo label="CEP " placeholder="Informe o seu CEP" keyboardType="number-pad" onChangeText={text => setPesquisar({ cep: text })} onBlur={requisicao} />
-                    <Campo label='Logradouro: ' defaultValue={infoCep.logradouro} onChangeText={Text => { setCep(prevPreferences => { return { ...prevPreferences, logradouro: String(Text).trim() } }); validarCampo(); }} onBlur={() => { validarCampo(); }} />
-                    <Campo label="Nº: " defaultValue={infoCep.numero} onChangeText={Text => { setCep(prevPreferences => { return { ...prevPreferences, numero: String(Text).trim() } }); validarCampo(); }} />
-                    <Campo label='Complemento: ' defaultValue={infoCep.complemento} onBlur={() => validarCampo()} />
-                    <Campo label='Bairro: ' value={infoCep.bairro} onBlur={() => validarCampo()} />
-                    <Campo label='Cidade: ' value={infoCep.localidade} onBlur={() => validarCampo()} />
-                    <Campo label='UF: ' value={infoCep.uf} onBlur={() => { validarCampo(); }} />
-                    <View style = {estilo.btn_salvar}><Button onPress={() => Salvar(navigation)} title="Salvar" disabled={!Proximo}></Button></View>
+                    <Campo label='Logradouro: ' defaultValue={infoCep.logradouro} onChangeText={Text => { setCep(prevPreferences => { return { ...prevPreferences, logradouro: String(Text).trim() } }); }} />
+                    <Campo label="Nº: " defaultValue={infoCep.numero} onChangeText={Text => { setCep(prevPreferences => { return { ...prevPreferences, numero: String(Text).trim() } }); }} />
+                    <Campo label='Complemento: ' defaultValue={infoCep.complemento} />
+                    <Campo label='Bairro: ' value={infoCep.bairro} />
+                    <Campo label='Cidade: ' value={infoCep.localidade} />
+                    <Campo label='UF: ' value={infoCep.uf} />
+                    <View style={estilo.btn_salvar}><Button onPress={() => Salvar(navigation)} title="Salvar" disabled={!Proximo}></Button></View>
                 </ScrollView>
             </SafeAreaView>
         </View>
