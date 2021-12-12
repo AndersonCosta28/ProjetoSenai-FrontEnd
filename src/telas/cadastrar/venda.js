@@ -32,8 +32,9 @@ export default function App() {
       <Text>Selecionar Pessoa:</Text>
       <View>
         <Picker selectedValue={selectedEvent} style={{ height: 50, width: 150 }} onValueChange={(itemValue, itemIndex) => setSelectedEvent(itemValue)}>
-          <Picker.Item label="Pessoa 1" value="Pessoa 1" />
-          <Picker.Item label="Pessoa 2" value="Pessoa 2" />
+          {<Picker.Item label="Pessoa 1" value="Pessoa 1" />
+          <Picker.Item label="Pessoa 2" value="Pessoa 2" />}
+          
         </Picker>
       </View>
       <View></View>
