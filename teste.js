@@ -1,87 +1,38 @@
-// import React, {useState, useEffect} from 'react';
-// import {View, Button, Platform} from 'react-native';
-// import DateTimePicker from '@react-native-community/datetimepicker';
-// import {Campo, CampoData, CampoHora} from './src/campos'
+import React, { useState, useEffect } from "react";
+import { View, Picker, StyleSheet, Text } from "react-native";
+import axios from './src/axios'
 
-// export default function App(){
-//   const [date, setDate] = useState(new Date());
-//   const [mode, setMode] = useState('date');
-//   const [show, setShow] = useState(false);
+export default function App() {
+    const [selectedEvent, setSelectedEvent] = useState("Show 1");
+    const [selectedPerson, setSelectedPerson] = useState("Pessoa 1");
+    const [lista, setlista] = useState([]);
+    useEffect(() => {
+        axios.get('/dados/', { responseType: "json" })
+          .then(Response => {
+            setlista(Response.data)
+          })
+          .catch(Error => console.log(Error))
+      }, [])
 
-//   useEffect(() =>{    
-//     console.log(date.toTimeString() + "   -   " + date.toLocaleDateString())
-//   },[date, mode, show])
-
-//   const onChange = (event, selectedDate) => {
-//     const currentDate = selectedDate || date;
-//     setShow(Platform.OS === 'ios');
-//     setDate(currentDate);
-//   };
-
-//   const showMode = (currentMode) => {
-//     setShow(true);
-//     setMode(currentMode);
-//   };
-
-//   const showDatepicker = () => {
-//     showMode('date');
-//   };
-
-//   const showTimepicker = () => {
-//     showMode('time');
-//   };
-
-//   return (
-//     <View>
-//       <View>
-//         <Button onPress={showDatepicker} title="Show date picker!" />
-//       </View>
-//       <View>
-//         <Button onPress={showTimepicker} title="Show time picker!" />
-//       </View>
-//       {show && (
-//         <DateTimePicker
-//           testID="dateTimePicker"
-//           value={date}
-//           mode={mode}
-//           is24Hour={true}
-//           display="default"
-//           onChange={onChange}
-//         />
-//       )}   
-//     </View>
-//   );
-// };
-import React from 'react';
-import { Platform, StyleSheet, Text, ScrollView } from 'react-native';
-
-const App = () => {
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text>OS</Text>
-      <Text style={styles.value}>{Platform.OS}</Text>
-      <Text>OS Version</Text>
-      <Text style={styles.value}>{Platform.Version}</Text>
-      
-      <Text>Constants</Text>
-      <Text style={styles.value}>
-        {JSON.stringify(Platform.constants, null, 2)}
-      </Text>
-    </ScrollView>
-  );
-};
+    const lista2 = ["Home","Savings","Car","GirlFriend"];//[{ id: 1, nome: "Anderson" }, { id: 2, nome: "Ana" }, { id: 3, nome: "Ryan" }]
+    return (
+        <View style={styles.container}>
+            <Text>Selecionar Evento:</Text>
+            <View>
+                <Picker selectedValue={selectedPerson} style={{ height: 50, width: 150 }} onValueChange={(itemValue, itemIndex) => setSelectedPerson(itemValue)}>
+                    {lista.map((item,index)=>{
+                        return (<Picker.Item label={item.nome} value={index} key={index}/>) 
+                    })}
+                </Picker>
+            </View>
+        </View>
+    )
+}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  value: {
-    fontWeight: '600',
-    padding: 4,
-    marginBottom: 8
-  }
+    container: {
+        flex: 1,
+        paddingTop: 40,
+        alignItems: "center"
+    }
 });
-
-export default App;

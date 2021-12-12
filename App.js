@@ -15,6 +15,7 @@ import venda_I from './src/telas/cadastrar/venda'
 import evento_I from './src/telas/cadastrar/evento';
 import evento_U from './src/telas/atualizar/evento'
 import evento_S from './src/telas/visualizar/evento'
+import pessoa_aux from './src/telas/lista/pessoa_aux'
 import teste from './teste'
 
 function HomeScreen({ navigation }) {
@@ -116,6 +117,7 @@ function App() {
         <Stack.Screen name="evento_S" component={evento_S} />
         <Stack.Screen name="venda_I" component={venda_I} />
         <Stack.Screen name="venda" component={Venda} />
+        <Stack.Screen name="pessoa_aux" component={pessoa_aux} />
       </Stack.Navigator>
     </NavigationContainer>
   );
