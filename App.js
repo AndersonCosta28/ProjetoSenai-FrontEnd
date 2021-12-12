@@ -11,7 +11,8 @@ import listaMySQL from './src/telas/listaMySQL-old';
 import Pessoa_U from './src/telas/atualizar/form_update';
 import Pessoa_S from './src/telas/visualizar/form_select';
 
-import evento from './src/telas/cadastro/evento'
+import venda from './src/telas/cadastro/venda'
+import Evento from './Evento';
 import { useForm, Controller } from 'react-hook-form'
 import teste from './teste'
 
@@ -22,7 +23,10 @@ function HomeScreen({ navigation }) {
         <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('Pessoas')}><Text style={estilo.texto}>Pessoas</Text></TouchableOpacity>
       </View>
       <View style={estilo.view}>
-        <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('evento')}><Text style={estilo.texto}>evento</Text></TouchableOpacity>
+        <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('Evento')}><Text style={estilo.texto}>Criar evento</Text></TouchableOpacity>
+      </View>
+      <View style={estilo.view}>
+        <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('venda')}><Text style={estilo.texto}>Efetuar venda</Text></TouchableOpacity>
       </View>
       <View style={estilo.view}>
         <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('teste')}><Text style={estilo.texto}>teste</Text></TouchableOpacity>
@@ -80,7 +84,8 @@ function App() {
         <Stack.Screen name="Lista" component={lista} />        
         <Stack.Screen name="teste" component={teste} />
         {/* <Stack.Screen name="form" component={form} /> */}
-        <Stack.Screen name="evento" component={evento} />
+        <Stack.Screen name="Evento" component={Evento} />
+        <Stack.Screen name="venda" component={venda} />
       </Stack.Navigator>
     </NavigationContainer>
   );

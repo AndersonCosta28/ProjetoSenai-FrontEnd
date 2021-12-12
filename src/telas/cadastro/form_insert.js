@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View, TextInput, Button, ScrollView, StyleSheet, StatusBar, SafeAreaView, Alert } from 'react-native';
 import estilo from '../../estilo';
-import axios from 'axios';
+import axios from './../../axios';
 import firebase from '../../Connection';
 
 export default function App({ navigation }) {
@@ -31,7 +31,7 @@ export default function App({ navigation }) {
         Pessoa.endereco = infoCep
         console.log(JSON.stringify(Pessoa))
         //await firebase.database().ref('usuarios').child(id).set(DadosPessoais);
-        axios.post('https://projetosenai-backend.herokuapp.com/dados', Pessoa)
+        axios.post('/dados/', Pessoa)
             .then(Response => {
                 if (Response.data == true) {
                     Alert.alert(

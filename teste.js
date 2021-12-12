@@ -1,48 +1,49 @@
-import React from "react";
-import { Text, View, TextInput, Button, Alert } from "react-native";
-import { useForm, Controller } from "react-hook-form";
+import React, {useState} from 'react';
+import {View, Button, Platform} from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-export default function App() {
-  const { control, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: {
-      firstName: '',
-      lastName: ''
-    }
-  });
-  const onSubmit = data => console.log(data);
+export default function App(){
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
+  };
 
   return (
     <View>
-      <Controller control={control} rules={{ required: true, }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-          />
-        )}
-        name="firstName"
-      />
-      {errors.firstName?.type === 'required' && <Text>This is required.</Text>}
-
-      <Controller
-        control={control}
-        rules={{
-         required: true,
-         maxLength: 10,
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-          />
-        )}
-        name="lastName"
-      />
-      {errors.lastName?.type === 'maxLength' && <Text>Erro</Text> }
-      {errors.lastName?.type === 'required' && <Text>This is required.</Text>}
-      <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+      <View>
+        <Button onPress={showDatepicker} title="Show date picker!" />
+      </View>
+      <View>
+        <Button onPress={showTimepicker} title="Show time picker!" />
+      </View>
+      {show && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode={mode}
+          is24Hour={true}
+          display="default"
+          onChange={onChange}
+        />
+      )}
     </View>
   );
-}
+};

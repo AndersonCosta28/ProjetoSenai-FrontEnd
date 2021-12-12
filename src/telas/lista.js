@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Alert } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Alert, TextInput } from "react-native";
 import { Icon } from 'react-native-elements'
-import axios from 'axios';
-
-
-//style={{ backgroundColor: '#2089dc', width: 70, height: 40, marginLeft: 100, alignItems: 'center', justifyContent: 'center' }}
-
+import axios from './../axios';
+import estilo from './../estilo'
 
 export default function App({ navigation }) {
   const [lista, setlista] = useState([])
   useEffect(() => {
-    axios.get('https://projetosenai-backend.herokuapp.com/dados', { responseType: "json" })
+    axios.get('/dados/', { responseType: "json"})
       .then(Response => {
-        //console.log(Response.data)
         setlista(Response.data)
       })
       .catch(Error => console.log(Error))
@@ -32,7 +28,7 @@ const CardItem = (item, index, navigation) => {
   return (
     <View >
       <TouchableOpacity style={styles.container} onPress={() => {
-        axios.get('https://projetosenai-backend.herokuapp.com/dados', { responseType: "json", params: { idpessoa: item.idpessoa } })
+        axios.get('/dados/', { responseType: "json", params: { idpessoa: item.idpessoa } })
           .then(Response => {
             navigation.navigate('Pessoa_S', Response.data[0])
           })
@@ -43,7 +39,7 @@ const CardItem = (item, index, navigation) => {
         <Text>{item.email}</Text>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
           <TouchableOpacity style={{ margin: 20 }} onPress={() => {
-            axios.get('https://projetosenai-backend.herokuapp.com/dados', { responseType: "json", params: { idpessoa: item.idpessoa } })
+            axios.get('/dados/', { responseType: "json", params: { idpessoa: item.idpessoa } })
               .then(Response => {
                 navigation.navigate('Pessoa_U', Response.data[0])
               })
@@ -57,7 +53,7 @@ const CardItem = (item, index, navigation) => {
                 },
                 {
                   text: "Deletar", style: "default", onPress: () => {
-                    axios.delete('https://projetosenai-backend.herokuapp.com/dados', { responseType: "json", params: { idpessoa: item.idpessoa } })
+                    axios.delete('/dados/', { responseType: "json", params: { idpessoa: item.idpessoa } })
                       .then(Response => {
                         if (Response.data) {
                           navigation.navigate('Home')

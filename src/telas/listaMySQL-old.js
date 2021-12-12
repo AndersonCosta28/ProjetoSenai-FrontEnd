@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 
 const App = ({ navigation }) => {
     useEffect(() => {
-        axios.get('https://projetosenai-backend.herokuapp.com/dados', { responseType: "json" })
+        axios.get('/dados/', { responseType: "json" })
             .then(Response => {
                 setlista(Response.data)
             })
@@ -37,7 +37,7 @@ const App = ({ navigation }) => {
                         </Text>
                         <Button title="Alterar"
                             onPress={() => {
-                                axios.get('https://projetosenai-backend.herokuapp.com/dados', { responseType: "json", params: { idpessoa: item.idpessoa } })
+                                axios.get('/dados/', { responseType: "json", params: { idpessoa: item.idpessoa } })
                                     .then(Response => {
                                         navigation.navigate('Pessoa_U', Response.data[0])
                                     })
@@ -51,7 +51,7 @@ const App = ({ navigation }) => {
                                     },
                                     {
                                         text: "Deletar", style: "default", onPress: () => {
-                                            axios.delete('https://projetosenai-backend.herokuapp.com/dados', { responseType: "json", params: { idpessoa: item.idpessoa } })
+                                            axios.delete('/dados/', { responseType: "json", params: { idpessoa: item.idpessoa } })
                                                 .then(Response => {
                                                     if (Response.data) {
                                                         navigation.navigate('Home')

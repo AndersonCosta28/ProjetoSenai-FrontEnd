@@ -27,16 +27,16 @@ export default function App({ navigation }) {
   const requisicao = () => {
     axios.defaults.headers.get['Content-Type'] = 'application/json;charset=utf-8';
     axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
-    // axios.get('https://projetosenai-backend.herokuapp.com/dados', { responseType: "json", params: {nome: "Teste"} })
+    // axios.get('/dados/', { responseType: "json", params: {nome: "Teste"} })
     //   .then(Response => console.log(Response.data))
     //   .catch(Error => console.log(Error))
-    axios.get('https://projetosenai-backend.herokuapp.com/dados', { responseType: "json", params: { id: 1 } })
+    axios.get('/dados/', { responseType: "json", params: { id: 1 } })
       .then(Response => console.log(" <-->" + Response.data))
       .catch(Error => console.log(Error))
 
       // axios({
       //   method: 'get',
-      //   url: 'https://projetosenai-backend.herokuapp.com/dados/',
+      //   url: '/dados/',
       //   responseType: 'JSON',
       //   params: {id: 1}
       // })
