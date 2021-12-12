@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, Button, Platform} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {Campo, CampoData, CampoHora} from './src/campos'
 
 export default function App(){
   const [date, setDate] = useState(new Date(1598051730000));
@@ -44,6 +45,9 @@ export default function App(){
           onChange={onChange}
         />
       )}
+      <CampoData></CampoData>
+      <CampoHora></CampoHora>
+
     </View>
   );
 };

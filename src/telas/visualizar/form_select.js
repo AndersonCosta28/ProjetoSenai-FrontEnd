@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, Button, ScrollView, StyleSheet, StatusBar, SafeAreaView, Alert } from 'react-native';
+import {Campo} from '../../campos'
 import estilo from '../../estilo';
 
 export default function App({ route, navigation }) {
@@ -49,12 +50,7 @@ export default function App({ route, navigation }) {
         </View>
     );
 }
-const Campo = ({ label, ...props }) => (
-    <View style={estilo.t}>
-        <View style={estilo.t_view_text}><Text style={estilo.t_text}>{label}</Text></View>
-        <View><TextInput style={estilo.input} {...props} ></TextInput></View>
-    </View>
-)
+
 const styles = StyleSheet.create({
     scrollView: {
         marginHorizontal: 20,
