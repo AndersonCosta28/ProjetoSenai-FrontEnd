@@ -1,122 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, TextInput, Button, TouchableOpacity, Alert } from "react-native";
+import { View, StyleSheet, Text, TextInput, Button, TouchableOpacity, Alert, FlatList } from "react-native";
 import estilo from '../../estilo';
 import axios from '../../axios';
-import { Campo } from '../../campos'
 
 export default function App({ route, navigation }) {
-
-  const [listaEvento, setlistaEvento] = useState([])
-  
+  const [lista, setlista] = useState('');
   useEffect(() => {
-    axios.get('/evento/', { responseType: "json" })
+    axios.get('/venda/', { responseType: "json" })
       .then(Response => {
+        console.log(Response.data)
         setlista(Response.data)
       })
       .catch(Error => console.log(Error))
   }, [])
-
-  const [listaPEssoa, setlistaPessoa] = useState([])
-  useEffect(() => {
-    axios.get('/dados/', { responseType: "json" })
-      .then(Response => {
-        setlista(Response.data)
-      })
-      .catch(Error => console.log(Error))
-  }, [])
-
+  return (
+    <View>
+      <FlatList
+        data={lista}
+        renderItem={({ item, index }) => CardItem(item, index)}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </View>
+  )
 }
 
-const CardItem = (item, index, navigation) => {
+const CardItem = (item, index) => {
   return (
     <View >
-      <TouchableOpacity style={styles.container} onPress={() => {
-        axios.get('/evento/', { responseType: "json", params: { idevento: item.idevento } })
-          .then(Response => {
-            navigation.navigate('evento_S', Response.data[0])
-          })
-          .catch(Error => console.log(Error))
-      }}>
-        <Text style={styles.cardText}>{item.idevento} - {item.banda}</Text>
-        {/* <Text>{item.ingresso_inteira} - {item.ingresso_meia}</Text> */}
-    
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-          <TouchableOpacity style={{ margin: 20 }} onPress={() => {
-            axios.get('/evento/', { responseType: "json", params: { idevento: item.idevento } })
-              .then(Response => {
-                navigation.navigate('evento_U', Response.data[0])
-              })
-              .catch(Error => console.log(Error))
-          }}><Icon raised name='pencil' type='font-awesome' color='#2089dc' /></TouchableOpacity>
-          <TouchableOpacity style={{ margin: 20 }} onPress={() => {
-            Alert.alert("Deletar", `Deseja deletar o usuário ${item.idevento}?`,
-              [
-                {
-                  text: "Cancelar", style: "cancel"
-                },
-                {
-                  text: "Deletar", style: "default", onPress: () => {
-                    axios.delete('/evento/', { responseType: "json", params: { idevento: item.idevento } })
-                      .then(Response => {
-                        if (Response.data) {
-                          navigation.navigate('Home')
-                        }
-                        else {
-                          Alert.alert('Falha ao deletar a venda', '', [{ text: "Cancelar", style: "cancel" }])
-                        }
-                      })
-                      .catch(Error => Error)
-                  }
-                }
-              ])
-          }
-
-          }><Icon raised name='trash' type='font-awesome' color='#2089dc' /></TouchableOpacity>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.container} onPress={() => {
-        axios.get('/dados/', { responseType: "json", params: { idpessoa: item.idpessoa } })
-          .then(Response => {
-            navigation.navigate('Pessoa_S', Response.data[0])
-          })
-          .catch(Error => console.log(Error))
-      }}>
-        <Text style={styles.cardText}>{item.idpessoa} - {item.nome} {item.sobrenome} - {item.numero}</Text>
-        {/* <Text>{item.logradouro} -  - {item.bairro} - {item.localidade}</Text> */}
-        {/* <Text>{item.email}</Text> */}
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-          <TouchableOpacity style={{ margin: 20 }} onPress={() => {
-            axios.get('/dados/', { responseType: "json", params: { idpessoa: item.idpessoa } })
-              .then(Response => {
-                navigation.navigate('Pessoa_U', Response.data[0])
-              })
-              .catch(Error => console.log(Error))
-          }}><Icon raised name='pencil' type='font-awesome' color='#2089dc' /></TouchableOpacity>
-          <TouchableOpacity style={{ margin: 20 }} onPress={() => {
-            Alert.alert("Deletar", `Deseja deletar o usuário ${item.idpessoa}?`,
-              [
-                {
-                  text: "Cancelar", style: "cancel"
-                },
-                {
-                  text: "Deletar", style: "default", onPress: () => {
-                    axios.delete('/dados/', { responseType: "json", params: { idpessoa: item.idpessoa } })
-                      .then(Response => {
-                        if (Response.data) {
-                          navigation.navigate('Home')
-                        }
-                        else {
-                          Alert.alert('Falha ao deletar a pessoa', '', [{ text: "Cancelar", style: "cancel" }])
-                        }
-                      })
-                      .catch(Error => Error)
-                  }
-                }
-              ])
-          }
-
-          }><Icon raised name='trash' type='font-awesome' color='#2089dc' /></TouchableOpacity>
-        </View>
+      <TouchableOpacity style={styles.container} >
+        <Text style={styles.cardText}>{item.idvenda}</Text>
+        <Text>{item.nome} - {item.telefone}</Text>
+        <Text>{item.tipo_ingresso} - R$ {item.valor_ingresso}</Text>
+        <Text>{item.banda} - {new Date(item.datahora).toLocaleDateString()} - {new Date(item.datahora).toLocaleTimeString()}</Text>
       </TouchableOpacity>
     </View>
   )

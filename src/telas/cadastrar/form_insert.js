@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, Button, ScrollView, StyleSheet, StatusBar, SafeAreaView, Alert } from 'react-native';
 import estilo from '../../estilo';
 import axios from './../../axios';
-import firebase from '../../Connection';
 import { Campo } from '../../campos'
 
 

@@ -7,17 +7,14 @@ import Pessoa_I from './src/telas/cadastrar/form_insert';
 import Login from './src/telas/Login';
 import lista_pessoa from './src/telas/lista/pessoa'
 import estilo from './src/estilo';
-import firebase from './src/telas/FireBase';
 import Pessoa_U from './src/telas/atualizar/form_update';
 import Pessoa_S from './src/telas/visualizar/form_select';
 import evento_lista from './src/telas/lista/evento'
 import venda_I from './src/telas/cadastrar/venda'
-import venda_I2 from './src/telas/cadastrar/venda2'
+import venda_lista from './src/telas/lista/venda'
 import evento_I from './src/telas/cadastrar/evento';
 import evento_U from './src/telas/atualizar/evento'
 import evento_S from './src/telas/visualizar/evento'
-import pessoa_aux from './src/telas/lista/pessoa_aux'
-import teste from './teste'
 
 function HomeScreen({ navigation }) {
   return (
@@ -32,13 +29,9 @@ function HomeScreen({ navigation }) {
         <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('venda')}><Text style={estilo.texto}>Venda</Text></TouchableOpacity>
       </View>
       <View style={estilo.view}>
-        <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('teste')}><Text style={estilo.texto}>teste</Text></TouchableOpacity>
-      </View>
-      <View style={estilo.view}>
         <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('Login')}><Text style={estilo.texto}>Sair</Text></TouchableOpacity>
       </View>
     </View>
-
   );
 }
 function Pessoas({ navigation }) {
@@ -53,7 +46,6 @@ function Pessoas({ navigation }) {
     </View>
   )
 }
-
 function Evento({ navigation }) {
   return (
     <View style={estilo.container}>
@@ -70,21 +62,19 @@ function Venda({ navigation }) {
   return (
     <View style={estilo.container}>
       <View style={estilo.view}>
-        <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('venda_I')}><Text style={estilo.texto}>Cadastrar</Text></TouchableOpacity>
-      </View>
-      <View style={estilo.view}>
         <TouchableOpacity style={estilo.button} onPress={() => {
-          Promise.all([axios.get('/dados/', { responseType: "json" }), axios.get('/evento/', { responseType: "json" })]).then(res => {navigation.navigate('venda_I2', {lista_pessoa : res[0].data, lista_evento: res[1].data}) })
+          Promise.all([axios.get('/dados/', { responseType: "json" }), axios.get('/evento/', { responseType: "json" })]).then(res => {navigation.navigate('venda_I', {lista_pessoa : res[0].data, lista_evento: res[1].data}) })
 
         }}>
-
-
-          <Text style={estilo.texto}>Lista</Text></TouchableOpacity>
+          <Text style={estilo.texto}>Cadastrar</Text></TouchableOpacity>
       </View>
+      <View style={estilo.view}>
+        <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('venda_lista')}><Text style={estilo.texto}>Listar</Text></TouchableOpacity>
+      </View>
+      
     </View>
   )
 }
-
 function DetailsScreen({ route, navigation }) {
   const { nome } = route.params;
   const { sobrenome } = route.params;
@@ -100,9 +90,7 @@ function DetailsScreen({ route, navigation }) {
     </View>
   );
 }
-
 const Stack = createNativeStackNavigator();
-
 function App() {
   return (
     <NavigationContainer>
@@ -114,18 +102,15 @@ function App() {
         <Stack.Screen name="Pessoa_I" component={Pessoa_I} options={{ title: "Inserir cadastro" }} />
         <Stack.Screen name="Pessoa_U" component={Pessoa_U} options={{ title: "Alterar cadastro" }} />
         <Stack.Screen name="Pessoa_S" component={Pessoa_S} options={{ title: "Visualizar cadastro" }} />
-        <Stack.Screen name="firebase" component={firebase} />
         <Stack.Screen name="lista_pessoa" component={lista_pessoa} />
-        <Stack.Screen name="teste" component={teste} />
         <Stack.Screen name="Evento" component={Evento} />
         <Stack.Screen name="evento_I" component={evento_I} />
         <Stack.Screen name="evento_U" component={evento_U} />
         <Stack.Screen name="evento_lista" component={evento_lista} />
         <Stack.Screen name="evento_S" component={evento_S} />
         <Stack.Screen name="venda_I" component={venda_I} />
-        <Stack.Screen name="venda_I2" component={venda_I2} />
+        <Stack.Screen name="venda_lista" component={venda_lista} />
         <Stack.Screen name="venda" component={Venda} />
-        <Stack.Screen name="pessoa_aux" component={pessoa_aux} />
       </Stack.Navigator>
     </NavigationContainer>
   );

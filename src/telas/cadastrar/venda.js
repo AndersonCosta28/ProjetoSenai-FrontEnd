@@ -1,83 +1,98 @@
 import React, { useState, useEffect } from "react";
-import { View, Picker, StyleSheet, Text, Button } from "react-native";
+import { View, Picker, StyleSheet, Text, Button, Alert } from "react-native";
 import { RadioButton } from 'react-native-paper';
-import axios from '../../axios';
-import { Campo } from '../../campos';
-
+import estilo from '../../estilo';
+import axios from '../../axios'
 export default function App({ route, navigation }) {
-  axios.get('/dados/', { responseType: "json" })
-  .then(Response => {
-    setlista_pessoa(Response.data)
-  })
-  .catch(Error => console.log(Error))
-axios.get('/evento/', { responseType: "json" })
-  .then(Response => {
-    setlista_evento(Response.data)
-  })
-  .catch(Error => console.log(Error))
-  const [selectedEvent, setSelectedEvent] = useState();
-  const [selectedPerson, setSelectedPerson] = useState();
-  const [selectedEvent2, setSelectedEvent2] = useState();
-  const [selectedPerson2, setSelectedPerson2] = useState();
-  const [checked, setChecked] = useState("Inteira");
-  const [lista_pessoa, setlista_pessoa] = useState([])
-  const [lista_evento, setlista_evento] = useState([])
-  useEffect(() => {
-    
-  }, [])
+    const { lista_evento, lista_pessoa } = route.params;
+    const valor_inteira = lista_evento.map(a => a.ingresso_inteira)
+    const valor_meia = lista_evento.map(a => a.ingresso_meia)
+    const [selectedPerson, setSelectedPerson] = useState(0);
+    const [selectedPerson2, setSelectedPerson2] = useState(0);
+    const [checked, setChecked] = useState("Inteira");
+    const [Ingresso_inteira, SetIngresso_inteira] = useState(['0'])
+    const [Ingresso_meia, SetIngresso_meia] = useState(['0'])
+    useEffect(() => {
+        SetIngresso_inteira(valor_inteira);
+        SetIngresso_meia(valor_meia)
+    }, [selectedPerson2, setSelectedPerson])
 
-  return (
-    <View style={styles.container}>
-      <Text>Selecionar Pessoa:</Text>
-      <View>
-        <Picker selectedValue={selectedPerson} style={{ height: 50, width: 150 }} onValueChange={(itemValue, itemIndex) => setSelectedPerson(itemValue)}>
-          {lista_pessoa.map((item, index) => {
-            return (<Picker.Item label={item.nome} value={index} key={index} />)
-          })}
-        </Picker>
-      </View>
-      <Text>Selecionar Evento:</Text>
-      <View>
-        <Picker selectedValue={selectedPerson2} style={{ height: 50, width: 150 }} onValueChange={(itemValue, itemIndex) => { console.log(lista_evento[itemValue].banda); setSelectedPerson2(itemValue)}}>
-          {lista_evento.map((item, index) => {
-            return (<Picker.Item label={item.banda} value={index} key={index} />)
-          })}
-        </Picker>
-      </View>
-      <View>
-        <Text>Selecionar tipo ingresso:</Text>
-        <View>
-          <Text>Inteira: {String(lista_evento[itemValue].ingresso_inteira)} </Text>
-          <RadioButton
-            value="Inteira"
-            status={checked === 'Inteira' ? 'checked' : 'unchecked'}
-            onPress={() => setChecked('Inteira')}
-          />
+    const Salvar = (navigation) => {
+        const venda = {
+            pessoa_id: lista_pessoa[selectedPerson].idpessoa,
+            evento_id: lista_evento[selectedPerson2].idevento,
+            valor: checked.valor,
+            sigla: checked.sigla
+        }
+        axios.post('/venda/', venda)
+            .then(Response => {
+                if (Response.data == true) {
+                    Alert.alert(
+                        "Cadastro efetuado com sucesso",
+                        "Clique para prosseguir",
+                        [{
+                            text: "Página inicial", onPress: () => navigation.navigate('Home'), style: "default"
+                        }]
+                    )
+                }
+                else {
+                    Alert.alert("Falha ao efetuar o cadastro", "Revise os dados antes de prosseguir", [{
+                        text: "Página inicial", style: "cancel"
+                    }])
+                }
+            })
+            .catch(Error => console.log(Error))
+    }
+    function onchange(itemValue = 0){
+        setSelectedPerson2(itemValue)
+    }
+    return (
+        <View style={styles.container}>
+            <Text>Selecionar Pessoa:</Text>
+            <View>
+                <Picker style={{ height: 50, width: 300 }} onValueChange={(itemValue, itemIndex) => setSelectedPerson(itemValue)}>
+                    <Picker.Item label="" value="" />
+                    {lista_pessoa.map((item, index) => {
+                        return (<Picker.Item label={`${String(item.idpessoa)} - ${item.nome} ${item.sobrenome}`} value={index} key={index} />)
+                    })}
+                </Picker>
+            </View>
+            <Text>Selecionar Evento:</Text>
+            <View>
+                <Picker style={{ height: 50, width: 300 }} onValueChange={(itemValue, itemIndex) => {onchange(itemValue)}}>
+                    <Picker.Item label="" value="" />
+                    {lista_evento.map((item, index) => {
+                        return (<Picker.Item label={`${item.banda} - ${new Date(item.datahora).toLocaleDateString()} - ${new Date(item.datahora).toLocaleTimeString()}`} value={index} key={index} />)
+                    })}
+                </Picker>
+            </View>
+            <View>
+                <Text>Selecionar tipo ingresso:</Text>
+                <View>
+                    <Text>Inteira: R$ {String(Ingresso_inteira[selectedPerson2]).replace('undefined','0')}</Text>
+                    <RadioButton
+                        value={String(Ingresso_inteira[selectedPerson2])}
+                        status={checked.Tipo === 'Inteira' ? 'checked' : 'unchecked'}
+                        onPress={() => setChecked({ Tipo: 'Inteira', sigla: 'I', valor: String(Ingresso_inteira[selectedPerson2]) })}
+                    />
+                </View>
+                <View>
+                    <Text>Meia: R$ {String(Ingresso_meia[selectedPerson2]).replace('undefined','0')}</Text>
+                    <RadioButton
+                        value={String(Ingresso_meia[selectedPerson2])}
+                        status={checked.Tipo === 'Meia' ? 'checked' : 'unchecked'}
+                        onPress={() => setChecked({ Tipo: 'Meia', sigla: 'M', valor: String(Ingresso_meia[selectedPerson2]) })}
+                    />
+                </View>
+            </View>
+            <View style={estilo.btn_salvar}><Button onPress={() => Salvar(navigation)} title="Salvar"></Button></View>
         </View>
-        <View>
-        {/* String(selectedPerson2) */}
-          <Text>Meia: {String(lista_evento[selectedPerson2].banda)}</Text> 
-          <RadioButton
-            value="Meia"
-            status={checked === 'Meia' ? 'checked' : 'unchecked'}
-            onPress={() => setChecked('Meia')}
-          />
-        </View>
-      </View>
-      <View>
-        <Button
-          title="Imprimir ingresso"
-          //onPress={() => Alert.alert('Ingresso sendo imprimido!')}
-          onPress={() => console.log("Ingresso sendo imprimido!")}
-        />
-      </View>
-    </View>
-  );
+    );
 }
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 40,
-    alignItems: "center"
-  }
+    container: {
+        flex: 1,
+        paddingTop: 40,
+        alignItems: "center"
+    }
 });
