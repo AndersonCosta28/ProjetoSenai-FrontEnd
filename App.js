@@ -1,4 +1,5 @@
 import * as React from 'react';
+import axios from './src/axios'
 import { View, Text, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -7,11 +8,11 @@ import Login from './src/telas/Login';
 import lista_pessoa from './src/telas/lista/pessoa'
 import estilo from './src/estilo';
 import firebase from './src/telas/FireBase';
-import listaMySQL from './src/telas/listaMySQL-old';
 import Pessoa_U from './src/telas/atualizar/form_update';
 import Pessoa_S from './src/telas/visualizar/form_select';
 import evento_lista from './src/telas/lista/evento'
 import venda_I from './src/telas/cadastrar/venda'
+import venda_I2 from './src/telas/cadastrar/venda2'
 import evento_I from './src/telas/cadastrar/evento';
 import evento_U from './src/telas/atualizar/evento'
 import evento_S from './src/telas/visualizar/evento'
@@ -41,40 +42,46 @@ function HomeScreen({ navigation }) {
   );
 }
 function Pessoas({ navigation }) {
-  return(
-  <View style={estilo.container}>
-    <View style={estilo.view}>
-      <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('Pessoa_I')}><Text style={estilo.texto}>Cadastrar</Text></TouchableOpacity>
+  return (
+    <View style={estilo.container}>
+      <View style={estilo.view}>
+        <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('Pessoa_I')}><Text style={estilo.texto}>Cadastrar</Text></TouchableOpacity>
+      </View>
+      <View style={estilo.view}>
+        <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('lista_pessoa')}><Text style={estilo.texto}>Lista</Text></TouchableOpacity>
+      </View>
     </View>
-    <View style={estilo.view}>
-      <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('lista_pessoa')}><Text style={estilo.texto}>Lista</Text></TouchableOpacity>
-    </View>
-  </View>
   )
 }
 
 function Evento({ navigation }) {
-  return(
-  <View style={estilo.container}>
-    <View style={estilo.view}>
-      <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('evento_I')}><Text style={estilo.texto}>Cadastrar</Text></TouchableOpacity>
+  return (
+    <View style={estilo.container}>
+      <View style={estilo.view}>
+        <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('evento_I')}><Text style={estilo.texto}>Cadastrar</Text></TouchableOpacity>
+      </View>
+      <View style={estilo.view}>
+        <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('evento_lista')}><Text style={estilo.texto}>Lista</Text></TouchableOpacity>
+      </View>
     </View>
-    <View style={estilo.view}>
-      <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('evento_lista')}><Text style={estilo.texto}>Lista</Text></TouchableOpacity>
-    </View>
-  </View>
   )
 }
 function Venda({ navigation }) {
-  return(
-  <View style={estilo.container}>
-    <View style={estilo.view}>
-      <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('venda_I')}><Text style={estilo.texto}>Cadastrar</Text></TouchableOpacity>
+  return (
+    <View style={estilo.container}>
+      <View style={estilo.view}>
+        <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('venda_I')}><Text style={estilo.texto}>Cadastrar</Text></TouchableOpacity>
+      </View>
+      <View style={estilo.view}>
+        <TouchableOpacity style={estilo.button} onPress={() => {
+          Promise.all([axios.get('/dados/', { responseType: "json" }), axios.get('/evento/', { responseType: "json" })]).then(res => {navigation.navigate('venda_I2', {lista_pessoa : res[0].data, lista_evento: res[1].data}) })
+
+        }}>
+
+
+          <Text style={estilo.texto}>Lista</Text></TouchableOpacity>
+      </View>
     </View>
-    <View style={estilo.view}>
-      <TouchableOpacity style={estilo.button} onPress={() => navigation.navigate('')}><Text style={estilo.texto}>Lista</Text></TouchableOpacity>
-    </View>
-  </View>
   )
 }
 
@@ -108,7 +115,7 @@ function App() {
         <Stack.Screen name="Pessoa_U" component={Pessoa_U} options={{ title: "Alterar cadastro" }} />
         <Stack.Screen name="Pessoa_S" component={Pessoa_S} options={{ title: "Visualizar cadastro" }} />
         <Stack.Screen name="firebase" component={firebase} />
-        <Stack.Screen name="lista_pessoa" component={lista_pessoa} />        
+        <Stack.Screen name="lista_pessoa" component={lista_pessoa} />
         <Stack.Screen name="teste" component={teste} />
         <Stack.Screen name="Evento" component={Evento} />
         <Stack.Screen name="evento_I" component={evento_I} />
@@ -116,6 +123,7 @@ function App() {
         <Stack.Screen name="evento_lista" component={evento_lista} />
         <Stack.Screen name="evento_S" component={evento_S} />
         <Stack.Screen name="venda_I" component={venda_I} />
+        <Stack.Screen name="venda_I2" component={venda_I2} />
         <Stack.Screen name="venda" component={Venda} />
         <Stack.Screen name="pessoa_aux" component={pessoa_aux} />
       </Stack.Navigator>

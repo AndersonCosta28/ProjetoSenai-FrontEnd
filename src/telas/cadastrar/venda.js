@@ -5,7 +5,16 @@ import axios from '../../axios';
 import { Campo } from '../../campos';
 
 export default function App({ route, navigation }) {
-
+  axios.get('/dados/', { responseType: "json" })
+  .then(Response => {
+    setlista_pessoa(Response.data)
+  })
+  .catch(Error => console.log(Error))
+axios.get('/evento/', { responseType: "json" })
+  .then(Response => {
+    setlista_evento(Response.data)
+  })
+  .catch(Error => console.log(Error))
   const [selectedEvent, setSelectedEvent] = useState();
   const [selectedPerson, setSelectedPerson] = useState();
   const [selectedEvent2, setSelectedEvent2] = useState();
@@ -14,21 +23,12 @@ export default function App({ route, navigation }) {
   const [lista_pessoa, setlista_pessoa] = useState([])
   const [lista_evento, setlista_evento] = useState([])
   useEffect(() => {
-    axios.get('/dados/', { responseType: "json" })
-      .then(Response => {
-        setlista_pessoa(Response.data)
-      })
-      .catch(Error => console.log(Error))
-    axios.get('/evento/', { responseType: "json" })
-      .then(Response => {
-        setlista_evento(Response.data)
-      })
-      .catch(Error => console.log(Error))
+    
   }, [])
 
   return (
     <View style={styles.container}>
-      <Text>Selecionar Evento:</Text>
+      <Text>Selecionar Pessoa:</Text>
       <View>
         <Picker selectedValue={selectedPerson} style={{ height: 50, width: 150 }} onValueChange={(itemValue, itemIndex) => setSelectedPerson(itemValue)}>
           {lista_pessoa.map((item, index) => {
@@ -36,9 +36,9 @@ export default function App({ route, navigation }) {
           })}
         </Picker>
       </View>
-      <Text>Selecionar Pessoa:</Text>
+      <Text>Selecionar Evento:</Text>
       <View>
-        <Picker selectedValue={selectedPerson2} style={{ height: 50, width: 150 }} onValueChange={(itemValue, itemIndex) => setSelectedPerson2(itemValue)}>
+        <Picker selectedValue={selectedPerson2} style={{ height: 50, width: 150 }} onValueChange={(itemValue, itemIndex) => { console.log(lista_evento[itemValue].banda); setSelectedPerson2(itemValue)}}>
           {lista_evento.map((item, index) => {
             return (<Picker.Item label={item.banda} value={index} key={index} />)
           })}
@@ -47,7 +47,7 @@ export default function App({ route, navigation }) {
       <View>
         <Text>Selecionar tipo ingresso:</Text>
         <View>
-          <Text>Inteira:</Text>
+          <Text>Inteira: {String(lista_evento[itemValue].ingresso_inteira)} </Text>
           <RadioButton
             value="Inteira"
             status={checked === 'Inteira' ? 'checked' : 'unchecked'}
@@ -55,7 +55,8 @@ export default function App({ route, navigation }) {
           />
         </View>
         <View>
-          <Text>Meia:</Text>
+        {/* String(selectedPerson2) */}
+          <Text>Meia: {String(lista_evento[selectedPerson2].banda)}</Text> 
           <RadioButton
             value="Meia"
             status={checked === 'Meia' ? 'checked' : 'unchecked'}
